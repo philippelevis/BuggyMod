@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.Vivelle.scarlett_johansson.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "scarlett_johansson.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
