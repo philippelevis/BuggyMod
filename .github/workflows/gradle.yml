@@ -86,7 +86,7 @@ jobs:
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
-        name: build-outputs
+        name: build-artifacts
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
