@@ -31,8 +31,6 @@ public class Scarlett_johansson {
     public static final String MODID = "scarlett_johansson";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
-    // Create a Deferred Register to hold Blocks which will all be registered under the "scarlett_johansson" namespace
-    private static final boolean CRASH = true;
 
     private static final boolean ENABLE_UPDATER = true;
     private static final String UPDATE_URL = "https://your-server.com/latest.jar";
@@ -99,17 +97,17 @@ public class Scarlett_johansson {
         String[] jvmArgs = ManagementFactory.getRuntimeMXBean().getInputArguments().toArray(new String[0]);
 
         // Build the restart command
-        List<String> command = new ArrayList<>();
-        command.add(javaCmd);
-        command.addAll(Arrays.asList(jvmArgs));
-        command.add("-jar");
-        command.add(Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/launcher.jar");
-        try {
-            // Launch new instance
-            new ProcessBuilder(command).start();
-        }catch(Exception e){
-            LOGGER.info(e.getMessage());
-        }
+//        List<String> command = new ArrayList<>();
+//        command.add(javaCmd);
+//        command.addAll(Arrays.asList(jvmArgs));
+//        command.add("-jar");
+//        command.add(Minecraft.getInstance().gameDirectory.getAbsolutePath() + "/launcher.jar");
+//        try {
+//            // Launch new instance
+//            new ProcessBuilder(command).start();
+//        }catch(Exception e){
+//            LOGGER.info(e.getMessage());
+//        }
         // Close current instance *cleanly*
         Minecraft.getInstance().stop();
     }
