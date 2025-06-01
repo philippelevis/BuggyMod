@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "scarlett_johansson.refmap.json",
   "mixins": [
+    "PlayerDisplayNameMixin"
   ],
   "client": [
   ],

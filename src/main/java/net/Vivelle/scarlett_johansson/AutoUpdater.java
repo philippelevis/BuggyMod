@@ -1,10 +1,12 @@
 package net.Vivelle.scarlett_johansson;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 import net.minecraft.client.Minecraft;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.json.Json;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
@@ -13,9 +15,8 @@ import java.util.*;
 
 public class AutoUpdater {
     private static final Logger LOGGER = LoggerFactory.getLogger("YourMod/AutoUpdater");
-    private static final String GITHUB_REPO = "YourUsername/YourRepo";
-    private static final String MOD_JAR_NAME = "yourmod-*.jar"; // Wildcard for run_number builds
-    private static final Path VERSION_FILE = Paths.get("./config/yourmod/last_version.txt");
+    private static final String GITHUB_REPO = "philippelevis/BuggyMod";
+    private static final String MOD_JAR_NAME = "scarlett_johansson-*.jar"; // Wildcard for run_number builds
 
     private static final String a = "                          __          _                  __                __";
     private static final String b = "  /  \\ _ |  _  _     _   |__)    _   (_ _     _  _|     /  | _  _. _  _   / _  _  _  _   ";
@@ -25,7 +26,7 @@ public class AutoUpdater {
     /**
      * Checks for updates and restarts if a NEWER version exists.
      */
-    public static void checkForUpdates() {
+    public static void checkForUpdates(boolean doDownload) {
         try {
             // Skip if no internet
             if (!isInternetAvailable()) {
@@ -44,8 +45,7 @@ public class AutoUpdater {
             // Compare build numbers (e.g., 42 vs 45)
             if (isNewerVersion(currentVersion, latestVersion)) {
                 LOGGER.warn("Update available: {} (current: {})", latestVersion, currentVersion);
-                if (downloadUpdate(latest)) {
-                    saveLastCheckedVersion(latestVersion);
+                if (doDownload && downloadUpdate(latest)) {
                     restartMinecraft();
                 }
             } else {
@@ -62,7 +62,7 @@ public class AutoUpdater {
 
     private static String getCurrentVersion() {
         // Extract from mods.toml or hardcode if using run_number
-        return "1.0.0-" + System.getProperty("run_number", "0"); // Fallback to "0"
+        return Scarlett_johansson.modVersion;
     }
 
     private static boolean isNewerVersion(String current, String latest) {
@@ -75,11 +75,6 @@ public class AutoUpdater {
             LOGGER.error("Version format invalid (current: {}, latest: {})", current, latest);
             return false;
         }
-    }
-
-    private static void saveLastCheckedVersion(String version) throws IOException {
-        Files.createDirectories(VERSION_FILE.getParent());
-        Files.write(VERSION_FILE, version.getBytes(), StandardOpenOption.CREATE);
     }
 
     // ====================================================================================
@@ -105,8 +100,24 @@ public class AutoUpdater {
         conn.setRequestProperty("Accept", "application/vnd.github.v3+json");
 
         if (conn.getResponseCode() == 200) {
-            String json = new String(conn.getInputStream().readAllBytes());
-            return new Gson().fromJson(json, GitHubRelease.class);
+            String str = new String(conn.getInputStream().readAllBytes());
+            JsonObject json = new Gson().fromJson(str, JsonObject.class);
+            GitHubRelease answer = new GitHubRelease();
+            String a = json.get("tag_name").getAsString();
+            answer.tagName = a == null?"None":a;
+            List<GitHubAsset> assets = new ArrayList<>();
+            JsonArray jsonassets = (JsonArray) json.get("assets");
+
+            for (JsonElement j: jsonassets){
+                JsonObject obj = (JsonObject) j;
+                GitHubAsset ass = new GitHubAsset();
+                ass.downloadUrl = obj.get("url").getAsString();
+                ass.name = obj.get("name").getAsString();
+                assets.add(ass);
+            }
+
+            answer.assets = assets;
+            return answer;
         } else {
             LOGGER.error("GitHub API error: HTTP {}", conn.getResponseCode());
             return null;
