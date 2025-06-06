@@ -1,22 +1,22 @@
 package net.Vivelle.scarlett_johansson;
 
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.json.Json;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
-import java.lang.management.ManagementFactory;
 import java.util.*;
 
 public class AutoUpdater {
     private static final Logger LOGGER = LoggerFactory.getLogger("YourMod/AutoUpdater");
     private static final String GITHUB_REPO = "philippelevis/BuggyMod";
-    private static final String MOD_JAR_NAME = "scarlett_johansson-*.jar"; // Wildcard for run_number builds
+    private static final String MOD_JAR_NAME = "scarlett_johansson-"; // Wildcard for run_number builds
 
     private static final String a = "                          __          _                  __                __";
     private static final String b = "  /  \\ _ |  _  _     _   |__)    _   (_ _     _  _|     /  | _  _. _  _   / _  _  _  _   ";
@@ -62,7 +62,7 @@ public class AutoUpdater {
 
     private static String getCurrentVersion() {
         // Extract from mods.toml or hardcode if using run_number
-        return Scarlett_johansson.modVersion;
+        return Scarlett_johansson.ModVersion;
     }
 
     private static boolean isNewerVersion(String current, String latest) {
@@ -111,7 +111,7 @@ public class AutoUpdater {
             for (JsonElement j: jsonassets){
                 JsonObject obj = (JsonObject) j;
                 GitHubAsset ass = new GitHubAsset();
-                ass.downloadUrl = obj.get("url").getAsString();
+                ass.downloadUrl = obj.get("browser_download_url").getAsString();
                 ass.name = obj.get("name").getAsString();
                 assets.add(ass);
             }
@@ -126,7 +126,7 @@ public class AutoUpdater {
 
     private static boolean downloadUpdate(GitHubRelease release) {
         Optional<String> downloadUrl = release.assets.stream()
-                .filter(asset -> asset.name.equals(MOD_JAR_NAME))
+                .filter(asset -> asset.name.equals(MOD_JAR_NAME+release.tagName.replace("v","")+".jar"))
                 .map(asset -> asset.downloadUrl)
                 .findFirst();
 
@@ -135,7 +135,10 @@ public class AutoUpdater {
             return false;
         }
 
-        Path updatePath = Paths.get("./config/your_mod/update.jar");
+        Path updatePath = Scarlett_johansson.ModFile.getFilePath();
+
+        LOGGER.error(downloadUrl.get());
+
         try {
             Files.createDirectories(updatePath.getParent());
             try (InputStream in = new URL(downloadUrl.get()).openStream()) {
@@ -156,7 +159,17 @@ public class AutoUpdater {
         log.error(c);
         log.error(d);
 
-        Minecraft.getInstance().stop();
+        // Server-side shutdown
+        if (!FMLEnvironment.dist.isClient()) {
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            if (server != null) {
+                server.stopServer();  // Graceful shutdown
+                return;
+            }
+        }
+
+        // Client-side or fallback shutdown (no direct Minecraft client imports)
+        Runtime.getRuntime().halt(1);  // Forceful exit with error code
     }
 
     // ====================================================================================

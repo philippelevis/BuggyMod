@@ -1,0 +1,18 @@
+{
+  "item.scarlett_johansson.owl_mask": "§4Owl§r mask",
+  "item.scarlett_johansson.cat_mask": "§4Cat§r mask",
+  "item.scarlett_johansson.stalker_mask": "§4Stalker§r mask",
+  "item.scarlett_johansson.star_mask": "§4Star§r mask",
+  "item.scarlett_johansson.book_mask": "§4Book§r mask",
+  "item.scarlett_johansson.friend_mask": "§4Friend§r mask",
+  "item.scarlett_johansson.stranger_mask": "§4Stranger§r mask",
+  "item.scarlett_johansson.foe_mask": "§4Foe§r mask",
+  "item.scarlett_johansson.bunny_mask": "§4Bunny§r mask",
+  "item.scarlett_johansson.ring": "ring",
+  "curios.identifier.wed": "Wedding Ring",
+  "message.scarlett_johansson.ring.given": "you gave the ring to %s",
+  "message.scarlett_johansson.ring.received": "%s gave you a ring",
+  "message.scarlett_johansson.ring.no_space": "%s is already married",
+  "message.scarlett_johansson.ring.try_unequip": "§4Till death do us part...",
+  "message.scarlett_johansson.ring.married": "§4Till death do us part..."
+}

@@ -24,8 +24,6 @@ public abstract class PlayerDisplayNameMixin {
     @Shadow private Component displayname;
     @Shadow public abstract Inventory getInventory();
 
-    @Shadow public abstract boolean setEntityOnShoulder(CompoundTag p_36361_);
-
     @Shadow @Final private static Logger LOGGER;
 
     @Inject(method = "getName",at = @At("RETURN"), cancellable = true)
