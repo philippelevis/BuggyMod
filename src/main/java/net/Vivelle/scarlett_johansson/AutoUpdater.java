@@ -1,7 +1,6 @@
 package net.Vivelle.scarlett_johansson;
 
 import com.google.gson.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -130,7 +129,7 @@ public class AutoUpdater {
                 .map(asset -> asset.downloadUrl)
                 .findFirst();
 
-        if (!downloadUrl.isPresent()) {
+        if (downloadUrl.isEmpty()) {
             LOGGER.error("No matching JAR found in release assets");
             return false;
         }
@@ -152,7 +151,7 @@ public class AutoUpdater {
         }
     }
 
-    private static void restartMinecraft() throws IOException {
+    private static void restartMinecraft() {
         Logger log = LoggerFactory.getLogger("");
         log.error(a);
         log.error(b);

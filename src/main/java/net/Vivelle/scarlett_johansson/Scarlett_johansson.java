@@ -2,7 +2,6 @@ package net.Vivelle.scarlett_johansson;
 
 import com.mojang.logging.LogUtils;
 import net.Vivelle.scarlett_johansson.items.ItemReg;
-import net.Vivelle.scarlett_johansson.items.WeddingRingItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -11,13 +10,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.forgespi.locating.IModFile;
 import org.slf4j.Logger;
 import net.Vivelle.scarlett_johansson.client.Scarlett_johansson_Client;
-import top.theillusivec4.curios.api.CuriosApi;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Scarlett_johansson.MODID)
@@ -26,7 +23,7 @@ public class Scarlett_johansson {
 //    // Define mod id in a common place for everything to reference
     public static final String MODID = "scarlett_johansson";
 
-    private static ModContainer ModContainer = ModList.get().getModContainerById(MODID).orElseThrow(() -> new IllegalStateException("Mod " + MODID + " not found!"));
+    private static final ModContainer ModContainer = ModList.get().getModContainerById(MODID).orElseThrow(() -> new IllegalStateException("Mod " + MODID + " not found!"));
 
     public static IModFile ModFile = ModContainer.getModInfo().getOwningFile().getFile();
 

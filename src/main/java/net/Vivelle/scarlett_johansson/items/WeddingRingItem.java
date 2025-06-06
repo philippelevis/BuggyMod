@@ -93,7 +93,7 @@ public class WeddingRingItem extends Item implements ICurioItem {
     }
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player self, LivingEntity other, InteractionHand hand) {
+    public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player self, @NotNull LivingEntity other, @NotNull InteractionHand hand) {
         if (!self.level().isClientSide && other instanceof Player otherPlayer) {
             LazyOptional<ICuriosItemHandler> curiosInventory = CuriosApi.getCuriosInventory(otherPlayer);
 
