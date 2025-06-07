@@ -61,6 +61,7 @@ public class Scarlett_johansson {
         // Add to ingredients tab
         if (event.getTabKey() == CreativeModeTabs.COMBAT) {
             ItemReg.getMasks().forEach((i, entry)->event.accept(entry));
+            event.accept(ItemReg.RING);
         }
     }
 }
